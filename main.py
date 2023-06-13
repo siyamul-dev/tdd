@@ -20,7 +20,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-MODEL = tf.keras.models.load_model("../models/1")
+MODEL = tf.keras.models.load_model("/models/1")
 
 CLASS_NAMES = ['Bacterial_spot',
  'Early_blight',
