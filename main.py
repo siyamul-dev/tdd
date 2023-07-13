@@ -35,6 +35,10 @@ CLASS_NAMES = ['Anthracnose',
  'Powdery Mildew',
  'Sooty Mould']
 
+@app.get("/")
+async def root():
+    return "Welcome! to 'Mango Leaf Diseases Prediction API'"
+    
 @app.get("/ping")
 async def ping():
     return "Hello, I am alive"
