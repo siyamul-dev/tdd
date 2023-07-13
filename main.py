@@ -1,3 +1,7 @@
+from fastapi import FastAPI, File, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
+import uvicorn
+import numpy as np
 from io import BytesIO
 from PIL import Image
 import tensorflow as tf
@@ -31,8 +35,12 @@ CLASS_NAMES = ['Bacterial_spot',
 
 @app.get("/ping")
 async def ping():
-Expand All
-	@@ -46,8 +48,12 @@ async def predict(
+    return "Hello, I am alive"
+def read_file_as_image(data) -> np.ndarray:
+    image = np.array(Image.open(BytesIO(data)))
+    return image
+@app.post("/predict")
+async def predict(
     file: UploadFile = File(...)
 ):
     image = read_file_as_image(await file.read())
@@ -41,8 +49,10 @@ Expand All
     predictions = MODEL.predict(img_batch)
 
     predicted_class = CLASS_NAMES[np.argmax(predictions[0])]
-Expand All
-	@@ -58,5 +64,5 @@ async def predict(
+    confidence = np.max(predictions[0])
+    return {
+        'class': predicted_class,
+        'confidence': float(confidence)
     }
 
 if __name__ == "__main__":
